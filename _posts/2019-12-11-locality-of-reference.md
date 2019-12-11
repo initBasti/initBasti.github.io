@@ -1,5 +1,5 @@
 ---
-published: false
+published: true
 ---
 Locality of reference (by Peter J. Denning)
 =========================
@@ -13,4 +13,3 @@ I found that the connection to the other topics really helped to acknowledge the
 
 If you like to read the article, I have also created a memory card set of questions to the text
 [here](https://www.memcode.com/courses/1897 "memory cards on memcode.com")
-
