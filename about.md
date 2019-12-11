@@ -4,21 +4,21 @@ title: About
 permalink: /about/
 published: true
 ---
-Sebastian, 28  
+Sebastian, 27  
 from: germany, Altmark  
 hobbies: programming, learning, piano, sports, meditation  
 fav topics: Linux Kernel hacking, Unix, OS Design, Memory Management and Data structures.  
-day job: System Administrator Ecommerce\
+day job: System Administrator Ecommerce
 
 ### Current setup:
 
 - Editor: VIM
-- Kernel: Linux 5.2.x
 - Distro: Open SUSE Tumbelweed
 - Fav system-programming lang: C
 - C compiler: gcc
 - Fav scripting lang: Python
 - Shell: bash
+- window manager: i3
 - Terminal: st
 - Taskmanager: taskwarrior
 - Timemanager: timewarrior
