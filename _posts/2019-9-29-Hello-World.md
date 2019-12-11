@@ -19,19 +19,5 @@ The goal of this activity is to be quite frank, more of selfish nature, because 
 
 ### Who am I?
 
-My name is Sebastian, 28 and quite obsessed with learning new things and solving problems.
+My name is Sebastian, 27 and quite obsessed with learning new things and solving problems.
 I live in germany, in an area called "Altmark" which could be loosely translated as old borderland. As a day job, I currently work as a System Administrator in an Ecommerce company.
-
-### Current setup:
-
-- Editor: VIM
-- Kernel: Linux 5.2.x
-- Distro: Open SUSE Tumbelweed
-- Fav system-programming lang: C
-- C compiler: gcc
-- Fav scripting lang: Python
-- Shell: bash
-- Terminal: st
-- Taskmanager: taskwarrior
-- Timemanager: timewarrior
-
