@@ -6,7 +6,7 @@
 name: Sebastian Fricke
 
 # Short bio or description (displayed in the header)
-description: Linux, Operating Systems, Memory Management & C
+description: Linux, Operating Systems & C
 
 # URL of your avatar or profile pic (you could use your GitHub profile pic)
 avatar: https://res.cloudinary.com/basti-cloud/image/upload/v1569743331/sebastianfrickedotme2.png
@@ -18,7 +18,7 @@ avatar: https://res.cloudinary.com/basti-cloud/image/upload/v1569743331/sebastia
 # Includes an icon in the footer for each username you enter
 footer-links:
   dribbble:
-  email: sebastian.fricke-linux@gmx.de
+  email: sebastian.fricke.linux@gmail.com
   facebook:
   flickr:
   github: initbasti
