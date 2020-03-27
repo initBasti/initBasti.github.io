@@ -4,16 +4,16 @@ title: About
 permalink: /about/
 published: true
 ---
-Sebastian, 27  
+Sebastian, 28  
 from: germany, Altmark  
-hobbies: programming, learning, piano, sports, meditation  
-fav topics: Linux Kernel hacking, Unix, OS Design, Memory Management and Data structures.  
+hobbies: programming, learning, piano, long distance running & bouldering , meditation  
+fav topics: Linux Kernel hacking, Unix, OS Design 
 day job: System Administrator Ecommerce
 
 ### Current setup:
 
 - Editor: VIM
-- Distro: Open SUSE Tumbelweed
+- Distro: Debian
 - Fav system-programming lang: C
 - C compiler: gcc
 - Fav scripting lang: Python
@@ -22,13 +22,15 @@ day job: System Administrator Ecommerce
 - Terminal: st
 - Taskmanager: taskwarrior
 - Timemanager: timewarrior
+- music player: cmus
+- mail program: neomutt
 
 ### More Information
 
 Company website: https://www.panasiam.com  
 blog hosting with: GitHub Pages  
-repository hosting on: http://rocketgit.com/user/initBasti  
+repository hosting on: http://rocketgit.com/user/initBasti & https://github.com/initBasti 
 
 ### Contact me
 
-sebastian.fricke-linux@gmx.de
+sebastian.fricke.linux@gmail.com
