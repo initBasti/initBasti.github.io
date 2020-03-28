@@ -70,21 +70,23 @@ We will work with 3 different linux kernel headers:
 
 Here is the function that is called, when the module is initialized into the kernel.  
 
-```static int __init hello_init(void)  
+~~~~~ c
+static int __init hello_init(void)  
 {  
     printk(KERN_INFO "HEWO: Hello World\n");  
     return 0;  
-}```
+}
+~~~~~
 
 
 And here the function, for the removal of the module:
 
-```
+~~~~~ c
 static void __exit hello_exit(void)
 {
 	printk(KERN_INFO "HEWO: Goodbye world\n");
 }
-```
+~~~~~~
 Notice here the KERN_INFO, this represents the loglevel of the message.
 The Kernel provides 8 loglevels
 * KERN_EMERG - Emergency condition, system is probably dead
@@ -98,18 +100,19 @@ The Kernel provides 8 loglevels
 
 We assign these both as the functions for initialization and removal with:
 
-```
+~~~~~~ c
 module_init(hello_init);
 module_exit(hello_exit);
-```
+~~~~~~
+
 And finally we need to write some description and license information.
 
-```
+~~~~~~ c
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("<Your Name>");
 MODULE_DESCRIPTION("<What does the module do>");
 MODULE_VERSION("0.1");
-```
+~~~~~~
 
 **That's it!**
 Now we need to write a makefile to compile it.
@@ -127,14 +130,14 @@ $(PWD) is current working directory
 
 And the Makefile rules *build* or *clean*
 
-```
+~~~~~~ c
 obj-m+=hello-world.o
 
 all:
 	make -C /lib/modules/$(shell uname -r)/build/ M=$(PWD) modules
 clean:
 	make -C /lib/modules/$(shell uname -r)/build/ M=$(PWD) clean
-```
+~~~~~~
 
 ---
 
