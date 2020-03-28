@@ -70,13 +70,11 @@ We will work with 3 different linux kernel headers:
 
 Here is the function that is called, when the module is initialized into the kernel.  
 
-``
-static int __init hello_init(void)  
+```static int __init hello_init(void)  
 {  
     printk(KERN_INFO "HEWO: Hello World\n");  
     return 0;  
-}
-``
+}```
 
 
 And here the function, for the removal of the module:
