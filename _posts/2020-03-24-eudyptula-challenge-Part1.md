@@ -70,13 +70,13 @@ We will work with 3 different linux kernel headers:
 
 Here is the function that is called, when the module is initialized into the kernel.  
 
-```
+``
 static int __init hello_init(void)  
 {  
     printk(KERN_INFO "HEWO: Hello World\n");  
     return 0;  
 }
-```
+``
 
 
 And here the function, for the removal of the module:
@@ -89,16 +89,14 @@ static void __exit hello_exit(void)
 ```
 Notice here the KERN_INFO, this represents the loglevel of the message.
 The Kernel provides 8 loglevels
-| Loglevel | Description |
-| -------- |:-----------------------------------------------------------:|
-| KERN_EMERG | Emergency condition, system is probably dead |
-| KERN_ALERT | Some problem has occurred, immediate attention is needed |
-| KERN_CRIT | A critical condition |
-| KERN_ERR | An error has occurred |
-| KERN_WARNING | A warning |
-| KERN_NOTICE | Normal message to take note of |
-| KERN_INFO | Some information |
-| KERN_DEBUG | Debug information related to the program |
+* KERN_EMERG - Emergency condition, system is probably dead
+* KERN_ALERT - Some problem has occurred, immediate attention is needed
+* KERN_CRIT - A critical condition
+* KERN_ERR - An error has occurred
+* KERN_WARNING - A warning
+* KERN_NOTICE - Normal message to take note of
+* KERN_INFO - Some information
+* KERN_DEBUG - Debug information related to the program
 
 We assign these both as the functions for initialization and removal with:
 
