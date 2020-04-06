@@ -1,4 +1,4 @@
-# Eudyptula Challenge Number 2
+# The second part of my small adventure  
 
 ### (Or how to build the kernel from source)
 
