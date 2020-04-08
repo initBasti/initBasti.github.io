@@ -122,9 +122,10 @@ Now we need to write a makefile to compile it.
 This is pretty straightforward, call the Makefile within the  
 /lib/modules/\<your-kernel-version\>/build folder with the parameter:  
 M=$(PWD)
-> The M= option causes that makefile to move back into your module source directory  
-> before trying to build the modules target. - **Linux Device Drivers, 3rd Edition** 
-> **Jonathan Corbet et al.**  
+> The M= option causes that makefile to move back  
+> into your module source directory before trying  
+> to build the modules target.  
+> **Linux Device Drivers, 3rd Edition, Jonathan Corbet**  
 
 $(PWD) is current working directory
 
