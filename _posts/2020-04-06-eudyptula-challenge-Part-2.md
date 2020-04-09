@@ -138,6 +138,23 @@ This means that we have to fetch the changes and then checkout to the new upstre
 git fetch origin
 git checkout origin/master
 ```
+But we will encounter a small problem with just doing the checkout: *a detached HEAD*  
+**What is a detached HEAD?**  
+This is state, where you are no longer within any branch, which is totally fine  
+for just looking around without making any changes.  
+But as soon as you want to make changes it becomes a bit problematic.  
+**How to avoid a detached HEAD?**  
+Instead of checking out to the newest commit from the source tree  
+use `git reset --hard origin/master`.  
+That approach will move the HEAD to newest commit and change all your files to the new state.  
+**Careful!** any temporary changes made to the source code are lost, that way!  
+**How to merge changes of a detached HEAD into a branch?**  
+* Get the commit hash of your change `git log -n 1`  
+* Go to the branch you want to use `git checkout master`  
+* Create a temporary branch for the change `git branch tmp <commit-hash>`  
+* Merge the temporary branch into the branch `git merge tmp`,  
+verify that you are on the correct branch before merging with `git branch`  
+[\[3\]](https://stackoverflow.com/a/10229202/9918329)  
 
 ## A Problem that I had
 
@@ -145,9 +162,10 @@ git checkout origin/master
 I created my config though menuconfig and afterwards the debian certificate was added to the config option:  
 `CONFIG_SYSTEM_TRUSTED_KEYS`  
 You just have to set that option to a empty string \(""\), to fix this.  
-[\[3\]](https://www.linuxquestions.org/questions/linux-embedded-and-single-board-computer-78/failed-to-build-linux-kernel-4175667466/)  
+[\[4\]](https://www.linuxquestions.org/questions/linux-embedded-and-single-board-computer-78/failed-to-build-linux-kernel-4175667466/)  
 
 ## References  
 [\[1\]](http://files.kroah.com/lkn/lkn_pdf/ch01.pdf) *Introduction chapter of the Linux kernel in a nutshell book with advice about where to build the Kernel.*  
 [\[2\]](https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux.git/tree/README?id=refs/tags/v4.3.3) *About the make localmodconfig from the Kernel README file*  
-[\[3\]](https://www.linuxquestions.org/questions/linux-embedded-and-single-board-computer-78/failed-to-build-linux-kernel-4175667466/) *Answer on linuxquestions* 
+[\[3\]](https://stackoverflow.com/a/10229202/9918329) *Stackoverflow answer for working with a detached HEAD*  
+[\[4\]](https://www.linuxquestions.org/questions/linux-embedded-and-single-board-computer-78/failed-to-build-linux-kernel-4175667466/) *Answer on linuxquestions* 
