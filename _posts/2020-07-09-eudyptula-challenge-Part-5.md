@@ -79,32 +79,29 @@ Whenever the root hub port detects a new device connection the `hub_irq` functio
 
 Now to explain the steps, that follow take a look at the steps described in the [XHCI specification](https://www.intel.com/content/www/us/en/products/docs/io/universal-serial-bus/extensible-host-controler-interface-usb-xhci.html) on page 83-85. The connection change is handled by the host controller, by setting the CSC flag to 1 and posting a port status change event to the event ring, the system has to identify on which port an event took place. You can watch that step within the `hub_event` function:  
 
-```
-for (i = 1; i <= hdev->maxchild; i++) {
-    struct usb_port *port_dev = hub->ports[i - 1];
+    for (i = 1; i <= hdev->maxchild; i++) {
+        struct usb_port *port_dev = hub->ports[i - 1];
 
-    if (test_bit(i, hub->event_bits)
-            || test_bit(i, hub->change_bits)
-            || test_bit(i, hub->wakeup_bits)) {
-        ...
-        port_event(hub, i);
-        ...
+        if (test_bit(i, hub->event_bits)
+                || test_bit(i, hub->change_bits)
+                || test_bit(i, hub->wakeup_bits)) {
+            ...
+            port_event(hub, i);
+            ...
+        }
     }
-}
-```
+
 Now, that we found the correct port, it is important to know what kind of action is required (insert/detach/reset). A call to `hub_port_status` reads the bits of the `PORTSC` register to get that piece of information.  
 
-```
-static int hub_ext_port_status(struct usb_hub *hub, int port1, int type, u16 *status, u16 *change, u32 *ext_status)
-{
-    ...
-	ret = get_port_status(hub->hdev, port1, &hub->status->port, type, len);
-    ...
-		*status = le16_to_cpu(hub->status->port.wPortStatus);
-		*change = le16_to_cpu(hub->status->port.wPortChange);
-    ...
-}
-```
+    static int hub_ext_port_status(struct usb_hub *hub, int port1, int type, u16 *status, u16 *change, u32 *ext_status)
+    {
+        ...
+        ret = get_port_status(hub->hdev, port1, &hub->status->port, type, len);
+        ...
+            *status = le16_to_cpu(hub->status->port.wPortStatus);
+            *change = le16_to_cpu(hub->status->port.wPortChange);
+        ...
+    }
 
 On a connection change, the function `hub_port_connect_change` checks if it can restore an existing device before calling `hub_port_connect`.
 
@@ -112,37 +109,29 @@ Which is responsible for setting up the USB device on the hub.
 Configure and allocate the device:
 
 
-```
-static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus, u16 portchange)
-{
-    ...
-    udev = usb_alloc_dev(hdev, hdev->bus, port1);
-    ...
-```
+    static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus, u16 portchange)
+    {
+        ...
+        udev = usb_alloc_dev(hdev, hdev->bus, port1);
+        ...
 
 Enable & address the device and get a device descriptor within:  
-```
-    ...
-    status = hub_port_init(hub, udev, port1, i);
-    ...
-```
+        ...
+        status = hub_port_init(hub, udev, port1, i);
+        ...
 Register the device and find a driver:  
-```
-    ...
-    status = usb_new_device(udev);
-    ...
-}
-```
+        ...
+        status = usb_new_device(udev);
+        ...
+    }
 
 Within `usb_alloc_dev` a device slot is acquired by calling the host controller function `xhci_alloc_dev`:
-```
-int xhci_alloc_dev(struct usb_hcd *hcd, struct usb_device *udev)
-{
-    ...
-	ret = xhci_queue_slot_control(xhci, command, TRB_ENABLE_SLOT, 0);
-    ...
-}
-```
+    int xhci_alloc_dev(struct usb_hcd *hcd, struct usb_device *udev)
+    {
+        ...
+        ret = xhci_queue_slot_control(xhci, command, TRB_ENABLE_SLOT, 0);
+        ...
+    }
 
 A device slot describes the generic set of data structures used by a USB device through the XHCI interface.  
 Those data structures are for example:  
@@ -161,35 +150,31 @@ Those data structures are for example:
 
 
 In `hub_port_init`, the hub driver makes calls to the host controller driver to enable the device and get an address for the device:  
-```
-static int
-hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
-		int retry_counter)
-{
-    ...
-    for (retries = 0; retries < GET_DESCRIPTOR_TRIES; (++retries, msleep(100))) {
+    static int
+    hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
+            int retry_counter)
+    {
         ...
-            retval = hub_enable_device(udev);
+        for (retries = 0; retries < GET_DESCRIPTOR_TRIES; (++retries, msleep(100))) {
             ...
+                retval = hub_enable_device(udev);
+                ...
 
-                retval = hub_set_address(udev, devnum);
-        ...
-}
-```
+                    retval = hub_set_address(udev, devnum);
+            ...
+    }
 
 When the device is addressed, the default control endpoint (ep0) is activated, which enables the system to get access to the device's configuration, status, and control information.
 
 Within `usb_new_device`, a call to `device_add` includes the device into `sysfs` and finally executes `kobject_uevent`:  
-```
-int device_add(struct device *dev)
-{
-    ...
-    error = kobject_add(&dev->kobj, dev->kobj.parent, NULL);
-    ...
-    kobject_uevent(&dev->kobj, KOBJ_ADD);
-    ...
-}
-```
+    int device_add(struct device *dev)
+    {
+        ...
+        error = kobject_add(&dev->kobj, dev->kobj.parent, NULL);
+        ...
+        kobject_uevent(&dev->kobj, KOBJ_ADD);
+        ...
+    }
 
 The uevent function writes arguments, that specify the device and the event, directly to a Netlink socket. A Netlink socket is a special tool for asynchronous inter-process communication of the kernel and userspace. Those strings are then read by the udev daemon, which lurks on the socket for messages and splits them into their sub-components. The user can specify rules, that trigger if arguments match a rule.
 
