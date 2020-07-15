@@ -79,7 +79,7 @@ Whenever the root hub port detects a new device connection the `hub_irq` functio
 
 Now to explain the steps, that follow take a look at the steps described in the [XHCI specification](https://www.intel.com/content/www/us/en/products/docs/io/universal-serial-bus/extensible-host-controler-interface-usb-xhci.html) on page 83-85. The connection change is handled by the host controller, by setting the CSC flag to 1 and posting a port status change event to the event ring, the system has to identify on which port an event took place. You can watch that step within the `hub_event` function:  
 
-```
+``
 for (i = 1; i <= hdev->maxchild; i++) {
     struct usb_port *port_dev = hub->ports[i - 1];
 
@@ -91,10 +91,10 @@ for (i = 1; i <= hdev->maxchild; i++) {
         ...
     }
 }
-```
+``
 Now, that we found the correct port, it is important to know what kind of action is required (insert/detach/reset). A call to `hub_port_status` reads the bits of the `PORTSC` register to get that piece of information.  
 
-```
+``
 static int hub_ext_port_status(struct usb_hub *hub, int port1, int type, u16 *status, u16 *change, u32 *ext_status)
 {
     ...
@@ -104,7 +104,7 @@ static int hub_ext_port_status(struct usb_hub *hub, int port1, int type, u16 *st
 		*change = le16_to_cpu(hub->status->port.wPortChange);
     ...
 }
-```
+``
 
 On a connection change, the function `hub_port_connect_change` checks if it can restore an existing device before calling `hub_port_connect`.
 
@@ -112,27 +112,27 @@ Which is responsible for setting up the USB device on the hub.
 Configure and allocate the device:
 
 
-```
+``
 static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus, u16 portchange)
 {
     ...
     udev = usb_alloc_dev(hdev, hdev->bus, port1);
     ...
-```
+``
 
 Enable & address the device and get a device descriptor within:  
-```
+``
     ...
     status = hub_port_init(hub, udev, port1, i);
     ...
-```
+``
 Register the device and find a driver:  
-```
+``
     ...
     status = usb_new_device(udev);
     ...
 }
-```
+``
 
 Within `usb_alloc_dev` a device slot is acquired by calling the host controller function `xhci_alloc_dev`:
 ```
