@@ -103,6 +103,8 @@ Now, that we found the correct port, it is important to know what kind of action
         ...
     }
 
+Now, that we found the correct port, it is important to know what kind of action is required (insert/detach/reset). A call to `hub_port_status` reads the bits of the `PORTSC` register to get that piece of information.  
+
 On a connection change, the function `hub_port_connect_change` checks if it can restore an existing device before calling `hub_port_connect`.
 
 Which is responsible for setting up the USB device on the hub.  
