@@ -118,16 +118,20 @@ Configure and allocate the device:
         ...
 
 Enable & address the device and get a device descriptor within:  
+
     ...
     status = hub_port_init(hub, udev, port1, i);
     ...
+
 Register the device and find a driver:  
+
         ...
         status = usb_new_device(udev);
         ...
     }
 
 Within `usb_alloc_dev` a device slot is acquired by calling the host controller function `xhci_alloc_dev`:
+
     int xhci_alloc_dev(struct usb_hcd *hcd, struct usb_device *udev)
     {
         ...
@@ -152,6 +156,7 @@ Those data structures are for example:
 
 
 In `hub_port_init`, the hub driver makes calls to the host controller driver to enable the device and get an address for the device:  
+
     static int
     hub_port_init(struct usb_hub *hub, struct usb_device *udev, int port1,
             int retry_counter)
@@ -169,6 +174,7 @@ In `hub_port_init`, the hub driver makes calls to the host controller driver to 
 When the device is addressed, the default control endpoint (ep0) is activated, which enables the system to get access to the device's configuration, status, and control information.
 
 Within `usb_new_device`, a call to `device_add` includes the device into `sysfs` and finally executes `kobject_uevent`:  
+
     int device_add(struct device *dev)
     {
         ...
