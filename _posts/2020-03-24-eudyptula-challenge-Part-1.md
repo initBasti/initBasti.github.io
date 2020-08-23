@@ -1,21 +1,15 @@
-# Eudyptula
+# Printing to the kernel log
 
-A project started by folks of the linux kernel team, that has been aborted for quite
-a while now.  
-But when I looked at it, I just noticed that it looks like a fun way to
-learn how to develop the kernel.  
-These challenges start with the fundamentals like printing output to the kernel log and
-building the kernel.  
-Towards to more challenging tasks, that include creating drivers, syscalls and  
-even creating patches to the kernel, which are accepted by the community.  
+A project that was started by folks on the Linux kernel team and canceled some time ago.
+When I looked at the project, I noticed that it looks like a fun way to learn how to develop for the Linux kernel.
+These challenges start with the basics like printing the output to the kernel log and building the kernel.
+Moving on to more demanding tasks like creating drivers, system calls, and creating real patches for the kernel that are accepted by the community.
 
-#### Small remark:
-
-Please try to do these challenge on your own, for your own sake.  
+**If you have not solved the challenge, stop right after the description of the task and try it yourself first!**
 
 ---
 
-## The Task:
+## Task:
 Write a Linux kernel module, and stand-alone Makefile, that when loaded  
 prints to the kernel debug log level, "Hello World!"  Be sure to make  
 the module be able to be unloaded as well.  
@@ -50,7 +44,7 @@ If you want systemd to load the module on boot:
 * enter module names separated by new lines.
 
 ---
-## The execution:
+## Execution:
 
 #### hello-world.c
 We will work with 3 different linux kernel headers:  
@@ -125,7 +119,7 @@ M=$(PWD)
 > The M= option causes that makefile to move back  
 > into your module source directory before trying  
 > to build the modules target.  
-> **Linux Device Drivers, 3rd Edition, Jonathan Corbet**  
+> **Linux Device Drivers, 3rd Edition, Jonathan Corbet** [\[1\]](https://www.oreilly.com/library/view/linux-device-drivers/0596005903/ch02.html)  
 
 $(PWD) is current working directory
 
@@ -142,7 +136,7 @@ clean:
 
 ---
 
-## The Test
+## Test
 
 You can insert a module into the kernel by using the insmod command  
 together with super user do(sudo) or as root(to log to your root type: sudo su):  
@@ -186,8 +180,4 @@ Unload the module with:
 **I can only see Hello world but not Goodbye world?**
 * you probably forgot the '\n' within the printk's
 
----
-
-Here a small presentation:
-
-[![asciicast](https://asciinema.org/a/mH6VMYxP7h2Ctcs9C7JJUuoNC.svg)](https://asciinema.org/a/mH6VMYxP7h2Ctcs9C7JJUuoNC)
+[\[1\]](https://www.oreilly.com/library/view/linux-device-drivers/0596005903/ch02.html) *Explanation by Jonathan Corbet about the way Makefiles work for modules*  
