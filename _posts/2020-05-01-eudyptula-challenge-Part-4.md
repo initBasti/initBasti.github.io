@@ -1,4 +1,4 @@
-# It's not just about the 'what', it's also about the 'how'
+# Linux kernel style guidelines
 
 This challenge is about the little things that make the kernel code base feel less like different parts stuck together and more like a unified project with a clear style agenda.  
 

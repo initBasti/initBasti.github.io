@@ -1,10 +1,12 @@
-# The second part of my small adventure  
-
-### (Or how to build the kernel from source)
+# Building the kernel from source
 
 As part of the 20 challenge series, called Eudyptula (that was canceled in 2017),  
-I now arrived at the second challenge.  
-If you want to see my approach to the first part, [click here](https://sebastianfricke.me/eudyptula-challenge-Part1/).  
+I now arrive at the second challenge, which focused around the build process of the kernel.  
+
+If you are interested in the journey so far, checkout:  
+[1. Hello world module](https://sebastianfricke.me/eudyptula-challenge-Part1/)  
+
+**If you have not solved the challenge, stop right after the description of the task and try it yourself first!**
 
 ## Task  
 

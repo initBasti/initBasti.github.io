@@ -8,6 +8,8 @@ If you are interested in the journey so far, checkout:
 [3. Modify & Patch the kernel](https://sebastianfricke.me/eudyptula-challenge-Part-3/)  
 [4. Coding style practice](https://sebastianfricke.me/eudyptula-challenge-Part-4/)  
 
+**If you have not solved the challenge, stop right after the description of the task and try it yourself first!**
+
 ## Task
 Yeah, you survived the coding style mess! Now, on to some "real" things, as I know you are getting bored by these so far.
 

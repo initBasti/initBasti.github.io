@@ -9,6 +9,8 @@ If you are interested in the journey so far, checkout:
 [1. Hello world module](https://sebastianfricke.me/eudyptula-challenge-Part1/)  
 [2. Building the kernel](https://sebastianfricke.me/eudyptula-challenge-Part-2/)  
 
+**If you have not solved the challenge, stop right after the description of the task and try it yourself first!**
+
 ## Task  
 
 Now that you have your custom kernel up and running, it's time to modify  
