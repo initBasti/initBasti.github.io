@@ -2,7 +2,11 @@
 
 ## What is Video 4 Linux?
 
-A framework used for video streaming, control, capturing, and codec support, radio tuning and modulating, Radio Data Systems (RDS) (Radio traffic information).
+A framework used for video streaming, control, capturing, and codec support, radio tuning and modulating and even Radio Data Systems (RDS) (Radio traffic information).
+
+### Which problem does it solve?
+
+Before V4L (Video 4 Linux, the current version is called V4L2), there were a lot of very complex drivers, that were difficult to work with. So the goal of this framework is to create a common pathway for the creation of drivers as well as a universal API, which userspace can use in order to work with different drivers.
 
 ---
 
@@ -134,31 +138,52 @@ Because it cannot reference images in the future as it is a live streaming of da
 
 #### What are codecs?
 
-Codecs are a short form for compressor-decompressor, they are used to compress the size of images, while keeping as much information as possible. Or to decompress an image in order to use it. There are multiple codecs for different purposes. For example for video capturing, the goal is to save the greatest possible amount of information, as you are always able to compress the image afterwards but you will not be able to recover lost information. When editing a video you want a codec that enables you to swiftly move inbetween frames without having to sample together a frame from different parts of other frames. Then for playback and transmission of videos, we generally want to have a good balance out of the lowest possible size paired with a good looking quality. And finally for archival, you want to keep as much information (TODO)
+Codecs are a short form for compressor-decompressor, they are used to compress the size of images, while keeping as much information as possible. Or to decompress an image in order to use it. There are multiple codecs for different purposes. For example for video capturing, the goal is to save the greatest possible amount of information, as you are always able to compress the image afterwards but you will not be able to recover lost information. When editing a video you want a codec that enables you to swiftly move inbetween frames without having to sample together a frame from different parts of other frames. Then for playback and transmission of videos, we generally want to have a good balance out of the lowest possible size paired with a good looking quality. And finally for archival, you want to keep as much information as possible, in order to use that data later on.  
 
 Source: [\[11\]](https://youtu.be/sisvOeZItb0)
 
-#### What is a codec device?
+There are software and hardware codecs, which both have their advantages and disadvantages. A hardware codec is generally quite fast at doing a very specific job, most of them are very expensive and provide a high quality output. Software codecs shine because of their flexibility paired with an easier installation and possiblity for end-to-end encryption.  
+
+##### Popular codec formats
+
+* [HEVC/H.265](https://en.wikipedia.org/wiki/High_Efficiency_Video_Coding) (25-50% better compression than H.264 at the same quality)
+* [H.264](https://en.wikipedia.org/wiki/Advanced_Video_Coding) (lossless & lossy variations)
+* [RealVideo](https://en.wikipedia.org/wiki/RealVideo) (proprietary)
+* [DivX](https://en.wikipedia.org/wiki/DivX) (freemium, windows/mac only)
+
+##### What is a codec device?
 
 * A software or hardware device, that converts a RAW byte-stream into streamable digital data or vice-versa digital data into RAW byte-stream
 * The codec recieves a byte-stream, parses it to extract meta data and decodes it
 
-#### Examples for devices
+##### Examples for devices
 
 * Software codec devices:
     + OBS Studio [\[12\]](https://obsproject.com/)
 
-#### Different types of hardware codecs
+* Hardware codec devices:
+    + Video decoder used for connecting a camera directly to a monitor through the decoder. (Example: [Axis T8705](https://www.axis.com/files/datasheet/ds_t8705_decoder_t10110350_en_2010.pdf))
+    + A video encoder used for streaming video & audio data to a internet streaming provider in the correct format. (Example: [Digicast DMB-8800A](http://www.digicast.cn/en/proddetail.asp?id=416))
+
+##### Different types of hardware codecs
 
 - stateful hardware codecs:
 
     * the different states of the steps for decoding a byte-stream are kept in the hardware/firmware
     * user-space only has to provide the RAW/compressed byte-stream data to the codec hardware
 
+![Stateful decoder working principle by Maxime Rippard](https://raw.githubusercontent.com/initBasti/initBasti.github.io/master/images/stateful_decoder_diagram.jpg)
+[\[13\]](https://events19.linuxfoundation.org/wp-content/uploads/2017/12/Supporting-Hardware-Codecs-in-a-Linux-System-Maxime-Ripard-Bootlin.pdf)
+
 - stateless hardware codecs:
 
     * does not retain any state within it's hardware or firmware
     * user-space is responsible for maintaining the processed state of each frame and deliver it to the driver
+    * user-space also has to make sure that the order is correct
+    * hardware only provides the decoding of the byte-stream
+
+![Stateless decoder working principle by Maxime Rippard](https://raw.githubusercontent.com/initBasti/initBasti.github.io/master/images/stateless_decoder_diagram.jpg)
+[\[13\]](https://events19.linuxfoundation.org/wp-content/uploads/2017/12/Supporting-Hardware-Codecs-in-a-Linux-System-Maxime-Ripard-Bootlin.pdf)
 
 #### Further image processing
 
@@ -176,7 +201,7 @@ Source: [\[11\]](https://youtu.be/sisvOeZItb0)
 Let's look at an example of my webcam streaming for a few seconds. We can watch that process through an invocation of `strace v4l2-ctl -d /dev/video0 --stream-mmap --stream-count 10`, at first we will determine, what that command actually does.  
 The *strace* command is a Linux utility for tracing the system-calls of a program, which can be very useful for debugging or in our case for investigating the internals. The program *v4l2-ctl* is part of the [v4l-utils](https://git.linuxtv.org/v4l-utils.git) library & applications package, it is used to interact with video 4 linux drivers directly over the command line. The parameter `--stream-mmap` and `--stream-count 10` translate into: Get 10 frames of video from the device, which in this case is /dev/video0.  
 
-More specifically `--stream-mmap` says don't copy the memory over to the application but use the pointer to the buffer within the driver, by mapping the memory from the device into the application's address space. [\[13\]](https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/mmap.html#mmap) The alternatives to `--stream-mmap` are `--stream-user`, which allocates the buffers only within the application [\[14\]](https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/userp.html) and `--stream-dmabuf` to either create a file-descriptor to share data with other devices (exporter-role) or use a DMA buffer file-descriptor from another device (importer-role). [\[15\]](https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/dmabuf.html)  
+More specifically `--stream-mmap` says don't copy the memory over to the application but use the pointer to the buffer within the driver, by mapping the memory from the device into the application's address space. [\[14\]](https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/mmap.html#mmap) The alternatives to `--stream-mmap` are `--stream-user`, which allocates the buffers only within the application [\[15\]](https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/userp.html) and `--stream-dmabuf` to either create a file-descriptor to share data with other devices (exporter-role) or use a DMA buffer file-descriptor from another device (importer-role). [\[16\]](https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/dmabuf.html)  
 
 Looking at the output, we can quickly spot a certain pattern, namely there are a lot of `ioctl` system calls, with parameters that start with `VIDIOC_*`.  
 
@@ -212,8 +237,8 @@ Now that we know, what the command does and what those `ioctl` system calls are,
     - Get information about any active selections within the video (used for croping)
 
 * [ioctl **VIDIOC_SUBSCRIBE_EVENT**] : *Tell the system which events you want to listen to*
-    - Used in `streaming_set_cap` in order to listen to the V4L_EVENT_EOS (End of stream event)
-    - What kind of events are there? [\[16\]](https://www.kernel.org/doc/html/v4.12/media/uapi/v4l/vidioc-dqevent.html#event-type)
+    - Used in [streaming_set_cap](https://git.linuxtv.org/v4l-utils.git/tree/utils/v4l2-ctl/v4l2-ctl-streaming.cpp#n1757) in order to listen to the V4L_EVENT_EOS (End of stream event), which is not supported by every driver.
+    - What kind of events are there? [\[17\]](https://www.kernel.org/doc/html/v4.12/media/uapi/v4l/vidioc-dqevent.html#event-type)
         * Vertical sync is performed
         * End of stream reached
         * A control (brightness, gamma, contrast etc.) was changed either at the device or through the flags
@@ -234,27 +259,35 @@ Now that we know, what the command does and what those `ioctl` system calls are,
 
 * [ioctl **VIDIOC_REQBUFS**] : *Set up the buffers to stream the data from the device*
     - The buffers are created with the following options: *buffer type*, *type of memory mapping* and *count of buffers*
-    - There are multiple different types of buffers from *capture* to *output*, *radio* and special types. The interesting part for us are the *capture* devices. The table of buffer types is documented here [\[17\]](https://www.kernel.org/doc/html/v4.12/media/uapi/v4l/buffer.html#c.v4l2_buf_type).
+    - There are multiple different types of buffers from *capture* to *output*, *radio* and special types. The interesting part for us are the *capture* devices. The table of buffer types is documented here [\[18\]](https://www.kernel.org/doc/html/v4.12/media/uapi/v4l/buffer.html#c.v4l2_buf_type).
     - The memory mapping type is chosen by the user from the command line (mmap, userptr or dma)
     - The amount of buffers is usually 4 but is variable, when the given amount is 0 all mapped buffers are freed up
 
 * [ioctl **VIDIOC_QUERYBUF**] : *Check the status of a buffer*
-    - The following states of a buffer are of interest to us: *mapped*, *enqueued*, *full* or *empty* [\[18\]](https://www.kernel.org/doc/html/v4.12/media/uapi/v4l/mmap.html#streaming-i-o-memory-mapping)
+    - The following states of a buffer are of interest to us: *mapped*, *enqueued*, *full* or *empty* [\[19\]](https://www.kernel.org/doc/html/v4.12/media/uapi/v4l/mmap.html#streaming-i-o-memory-mapping)
     - The status of a buffer can be observed at any time after being requested
     - In this example QUERYBUF is used to get the offsets for the buffers
 
-* [ioctl **VIDIOC_QBUF**] : *Add an empty capture buffer to the queue*
+* [ioctl **VIDIOC_QBUF**] : *Add an empty capture buffer to the incoming queue*
     - enqueue empty (capture) or filled (output) buffer in the driver's incoming queue
-    - the buffer is then filled with data by the camera device, after which the application can read the data
+    - the buffer is then filled with data by the camera device, after which it is placed into the outgoing queue
     - the data is not copied, only pointers are exchanged
 
 * [ioctl **VIDIOC_G_FMT**] : *Get the current pixel format settings of the driver*
-    - window format, pixel format(RGB,YUV,etc.), capture field, color space [\[19\]](https://www.kernel.org/doc/html/v4.12/media/uapi/v4l/pixfmt-006.html#c.v4l2_colorspace)
+    - window format, pixel format(RGB,YUV,etc.), capture field, color space [\[20\]](https://www.kernel.org/doc/html/v4.12/media/uapi/v4l/pixfmt-006.html#c.v4l2_colorspace)
     - an application should always get the format first with *G_FMT* before changing the format with *S_FMT*
 
-* [ioctl **VIDIOC_STREAMON**]
-* [ioctl **VIDIOC_DQBUF**]
-* [ioctl **VIDIOC_STREAMOFF**]
+* [ioctl **VIDIOC_STREAMON**] : *Start the streaming process*
+    - activate capture devices and start filling input buffers
+    - calling STREAMON while streaming has no effect
+
+* [ioctl **VIDIOC_DQBUF**] : *Remove a filled capture buffer from the outgoing queue*
+    - remove the buffer from the outgoing queue of the driver after the driver handled the I/O of the capture device
+    - if no buffer is found in the outgoing queue DQBUF will immediatly return while raising the EAGAIN error code (used for non-blocking I/O to notify that no data was available)
+
+* [ioctl **VIDIOC_STREAMOFF**] : *Stop the streaming process*
+    - remove any buffer from the incoming queue and outgoing queue (all non-dequeued buffers are lost)
+    - resets everything to state after calling REQBUFS
 
 ##### Summary
 
@@ -268,9 +301,16 @@ We make sure that we listen to the 'End of stream' event and get the input sourc
 
 At this point, we are ready to work with the buffers, first we set them up with the demanded type (capture) as well as the memory mapping type (mmap through --stream-mmap). Followed by getting the current status and offsets from buffers at the driver, those buffers are then mapped into user-space with a few calls to the `mmap` syscall (within the [obtain_bufs method](https://git.linuxtv.org/v4l-utils.git/tree/utils/v4l2-ctl/v4l2-ctl-streaming.cpp#n1804)).  [*REQBUFS*] and [*QUERYBUF*]  
 
-Now, we can queue those buffers into the driver's incoming queue, where the buffer is filled with data from the camera device and placed into the driver's outgoing queue. The application cannot process the data until the buffer is dequeued. [*QBUF*]  
+Now, we can queue those buffers into the driver's incoming queue, notice that the capture device is deactivated until STREAMON is called. [*QBUF*]  
 
 Next the window & pixel format is pulled from the driver in order to interpret the image data correctly. [*G_FMT*]  
+
+As mentioned before, a call to STREAMON starts the streaming process, the capture device is activated and the driver handles the incoming I/O. [*STREAMON*]  
+
+The application dequeues buffers filled with data from the device of the driver's outgoing queue. After it has processed the data it queues the buffer back into the incoming queue. This process is continued until either the 'End of stream' event is raised by the driver, the application calls STREAMOFF or until the application is killed. [*DQ_BUF* & *STREAMOFF*]  
+
+![I/O states](https://static.lwn.net/images/ns/kernel/v4l2_buffers.png)
+[\[21\]](https://lwn.net/Articles/240667/)
 
 ---
 
@@ -287,10 +327,12 @@ Next the window & pixel format is pulled from the driver in order to interpret t
 [\[10\] Visual representation of chroma-subsampling formats on wikipedia](https://en.wikipedia.org/wiki/Chroma_subsampling#How_subsampling_works)  
 [\[11\] Quick basic explanation of codecs by B&H Photo Video](https://youtu.be/sisvOeZItb0)  
 [\[12\] OBS studio - broadcast software](https://obsproject.com/)  
-[\[13\] Kernel documentation about memory mapped buffers for streaming](https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/mmap.html#mmap)  
-[\[14\] Kernel documentation about user-space mapped buffers for streaming](https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/userp.html)  
-[\[15\] Kernel documentation about DMA buffers for streaming](https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/dmabuf.html)  
-[\[16\] Kernel documentation: event types](https://www.kernel.org/doc/html/v4.12/media/uapi/v4l/vidioc-dqevent.html#event-type)  
-[\[17\] Kernel documentation buffer types](https://www.kernel.org/doc/html/v4.12/media/uapi/v4l/buffer.html#c.v4l2_buf_type)  
-[\[18\] Kernel documentation explaination of the streaming process (at the bottom)](https://www.kernel.org/doc/html/v4.12/media/uapi/v4l/mmap.html#streaming-i-o-memory-mapping)  
-[\[19\] Kernel documentation available color spaces](https://www.kernel.org/doc/html/v4.12/media/uapi/v4l/pixfmt-006.html#c.v4l2_colorspace)  
+[\[13\] Presentation by Maxime Ripard about codecs in Linux](https://events19.linuxfoundation.org/wp-content/uploads/2017/12/Supporting-Hardware-Codecs-in-a-Linux-System-Maxime-Ripard-Bootlin.pdf)  
+[\[14\] Kernel documentation about memory mapped buffers for streaming](https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/mmap.html#mmap)  
+[\[15\] Kernel documentation about user-space mapped buffers for streaming](https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/userp.html)  
+[\[16\] Kernel documentation about DMA buffers for streaming](https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/dmabuf.html)  
+[\[17\] Kernel documentation: event types](https://www.kernel.org/doc/html/v4.12/media/uapi/v4l/vidioc-dqevent.html#event-type)  
+[\[18\] Kernel documentation buffer types](https://www.kernel.org/doc/html/v4.12/media/uapi/v4l/buffer.html#c.v4l2_buf_type)  
+[\[19\] Kernel documentation explaination of the streaming process (at the bottom)](https://www.kernel.org/doc/html/v4.12/media/uapi/v4l/mmap.html#streaming-i-o-memory-mapping)  
+[\[20\] Kernel documentation available color spaces](https://www.kernel.org/doc/html/v4.12/media/uapi/v4l/pixfmt-006.html#c.v4l2_colorspace)  
+[\[21\] Great explaination of this process on LWN.net by Jonathan Corbet](https://lwn.net/Articles/240667/)  
