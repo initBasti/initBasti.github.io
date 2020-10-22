@@ -2,11 +2,13 @@
 
 ## What is Video 4 Linux?
 
-A framework used for video streaming, control, capturing, and codec support, radio tuning and modulating and even Radio Data Systems (RDS) (Radio traffic information).
+A framework used for video streaming, control, capturing, and codec support, radio tuning and modulating, and even Radio Data Systems (RDS) (Radio traffic information).
 
 ### Which problem does it solve?
 
 Before V4L (Video 4 Linux, the current version is called V4L2), there were a lot of very complex drivers, that were difficult to work with. So the goal of this framework is to create a common pathway for the creation of drivers as well as a universal API, which userspace can use in order to work with different drivers.
+
+If you enjoy using memory cards, then you will maybe find my set of cards quite useful: [Memory cards on memcode.com](https://www.memcode.com/courses/3184)  
 
 ---
 
@@ -28,28 +30,28 @@ There is a great course on GitHub, about this topic, if you would like to dive i
 
 The general process works like this:
 
-The incoming light waves from the subject are focused on an image sensor through a lens. The image sensor consists of several photodiodes that generate an analog signal which is converted into a digital signal. To capture colors, a color filter array is placed over the image sensor in a specific pattern, so that each sensor element only captures green, blue, or red light waves. The resulting information is used in an interpolation algorithm that calculates the missing color values of all pixels for which color values were discarded. The result is polished and encoded through further processing in order to make it easy to transfer and save.
+The incoming light waves from the subject are focused on an image sensor through a lens. An image sensor consists of several photodiodes that generate an analog signal which is converted into a digital signal. To capture colors, a color filter array is placed over the image sensor in a specific pattern, so that each sensor element only captures green, blue, or red light waves. The resulting information is used in an interpolation algorithm that calculates the missing color values of all pixels for which color values were discarded. The result is polished and encoded through further processing in order to make it easy to transfer and save.
 
 ### Basic concept of an image
 
-The image, which you can see on your computer monitor, TV screen or projector, is made of single pixels. Each pixel contains information about its ratio of **R**ed, **G**reen, and **B**lue (atleast with the RGB color model), which make up the visible color. There are raster and vector images, usually the term digital image refers to raster images. A raster image is an array with a fixed amount of rows and columns, where each element in the grid contains information about the brightness of the color.
+The image, which you can see on your computer monitor, TV screen, or projector, is made of single pixels. Each pixel contains information about its ratio of **R**ed, **G**reen, and **B**lue (at least with the RGB color model), which make up the visible color. There are raster and vector images, usually, the term digital image refers to raster images. A raster image is an array with a fixed amount of rows and columns, where each element in the grid contains information about the brightness of the color.
 
 #### What is a pixel?
 
 The term pixel is used quite frequently in multiple contexts, but generally refers to:
 * The smallest controllable element of a picture on a screen [\[2\]](https://en.wikipedia.org/wiki/Pixel)
 * A single point within a raster image matrix is called a pixel (picture element). One pixel represents the intensity (usually a numeric value) of a given color. [\[3\]](https://github.com/leandromoreira/digital_video_introduction#basic-terminology)
-* A synonym for the term sensel, which refers to a single photodiode within a image sensor
+* A synonym for the term sensel, which refers to a single photodiode within an image sensor
 
 #### Difference between still image and video
 
 At a very simple level of abstraction, the difference between a still image and a video is simply that there are multiple frames per second that are required to create the illusion of movement for our eyes. But as we'll find out later, it is going to take a little more effort to make watching and streaming videos a nice experience.
 
-Next I'll talk about how hardware actually receives the information required for building an image.
+Next, I'll talk about how hardware actually receives the information required for building an image.
 
 ### What is an image sensor?
 
-A device that is used to detect information usable for creating images. It uses photodiodes to capture light and transform it to an electric signal.
+A device that is used to detect information usable for creating images. It uses photodiodes to capture light and transform it into an electric signal.
 
 #### What is a photodiode?
 
@@ -107,7 +109,7 @@ Here is a small example of how these values can be calculated: [\[9\]](https://w
 
 ### Making video data usable through data compression
 
-If a video runs at 30 frames per second and has a resolution of 1080p (1920 * 1080 pixels = 2073600 pixels), each 24-bit pixel requires 3 bytes to store color information. Then we're talking about 6.2MB per frame * 30 = 186MB per second. If you were to watch a 3 minute video, the entire video would be 33.5 GB in size. And this isn't even ultra high quality video (134.3GB). So the question is, how can we effectively use video with limited options for storage and data transfer, especially over the Internet.
+If a video runs at 30 frames per second and has a resolution of 1080p (1920 * 1080 pixels = 2073600 pixels), each 24-bit pixel requires 3 bytes to store color information. Then we're talking about 6.2 MB per frame * 30 = 186 MB per second. If you were to watch a 3-minute video, the entire video would be 33.5 GB in size. And this isn't even ultra high quality video (134.3 GB). So the question is, how can we effectively use video with limited options for storage and data transfer, especially over the Internet.
 
 #### video compression
 
@@ -116,7 +118,7 @@ For example, if the majority of your image is exactly the same color, a **spatia
 
 Then there is **chroma subsampling** which reduces the total amount of pixels storing color information by reusing the color information of neighboring pixels. Important about this transformation is that we keep all the brightness information because our eyes are much more sensitive to brightness than to color (the Y'CbCr color model is very useful for that case). Common pixel formats for chroma sub-sampling are 4:4:4, 4:4:2 & 4:2:0 [\[10\]](https://en.wikipedia.org/wiki/Chroma_subsampling#How_subsampling_works), The first number describes how many pixels per row are used for sampling (horizontal length), the second number describes how much color information is stored in the first line, and the third number indicates how many color changes are recorded from the first to the second line. For example in 4: 4: 2, we get the colors from a width of 4 pixels and keep all color information from the first line, but only store 2 color information from the second line and use the above color value for the discarded values. We therefore reduce the color information by 2/8, while 4: 2: 0 would reduce the color information to 50%.  
 
-A simple way to reduce the size of an image is to reduce only the [**bit depth**](https://en.wikipedia.org/wiki/Color_depth) of the image, which describes how many different levels of brightness from red to green and blue can be stored in a single pixel, for example: 24-bit color information can store 2 ^ 8 (256) tones of each RGB color, resulting in about 16 million different color combinations at 3 bytes per pixel in size. If you reduced this color information to a total of 16 bits (5 bits per color, 1 bit for transparency with 32768 color combinations), you could save 1/3 of the total size.  
+A simple way to reduce the size of an image is to reduce only the [**bit depth**](https://en.wikipedia.org/wiki/Color_depth) of the image, which describes how many levels of brightness from red to green and blue can be stored in a single pixel, for example: 24-bit color information can store 2 ^ 8 (256) tones of each RGB color, resulting in about 16 million different color combinations at 3 bytes per pixel in size. If you reduced this color information to a total of 16 bits (5 bits per color, 1 bit for transparency with 32768 color combinations), you could save 1/3 of the total size.  
 
 The techniques mentioned are lossy algorithms which lose information when the size is reduced. There are also lossless algorithms that mainly perform statistical analysis on images to find and remove redundancy. They are great when we can't afford to lose information from the picture (for example for medical pictures / videos). However, they require significantly more storage space, which is why most of the known video processing operations use lossy algorithms.
 
@@ -154,7 +156,7 @@ There are software and hardware codecs, which both have their advantages and dis
 ##### What is a codec device?
 
 * A software or hardware device, that converts a RAW byte-stream into streamable digital data or vice-versa digital data into RAW byte-stream
-* The codec recieves a byte-stream, parses it to extract meta data and decodes it
+* The codec recieves a byte-stream, parses it to extract metadata and decodes it
 
 ##### Examples for devices
 
@@ -199,7 +201,7 @@ There are software and hardware codecs, which both have their advantages and dis
 #### Observing a video stream process
 
 Let's look at an example of my webcam streaming for a few seconds. We can watch that process through an invocation of `strace v4l2-ctl -d /dev/video0 --stream-mmap --stream-count 10`, at first we will determine, what that command actually does.  
-The *strace* command is a Linux utility for tracing the system-calls of a program, which can be very useful for debugging or in our case for investigating the internals. The program *v4l2-ctl* is part of the [v4l-utils](https://git.linuxtv.org/v4l-utils.git) library & applications package, it is used to interact with video 4 linux drivers directly over the command line. The parameter `--stream-mmap` and `--stream-count 10` translate into: Get 10 frames of video from the device, which in this case is /dev/video0.  
+The *strace* command is a Linux utility for tracing the system-calls of a program, which can be very useful for debugging or in our case for investigating the internals. While the program *v4l2-ctl* is part of the [v4l-utils](https://git.linuxtv.org/v4l-utils.git) library & applications package, it is used to interact with video 4 linux drivers directly over the command line. The parameter `--stream-mmap` and `--stream-count 10` translate into: Get 10 frames of video from the device, which in this case is /dev/video0.  
 
 More specifically `--stream-mmap` says don't copy the memory over to the application but use the pointer to the buffer within the driver, by mapping the memory from the device into the application's address space. [\[14\]](https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/mmap.html#mmap) The alternatives to `--stream-mmap` are `--stream-user`, which allocates the buffers only within the application [\[15\]](https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/userp.html) and `--stream-dmabuf` to either create a file-descriptor to share data with other devices (exporter-role) or use a DMA buffer file-descriptor from another device (importer-role). [\[16\]](https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/dmabuf.html)  
 
@@ -208,7 +210,7 @@ Looking at the output, we can quickly spot a certain pattern, namely there are a
 #### What is the `ioctl` system call and what does it do?  
 
 It is a way for user-space to make a direct request to the operating system, for a functionality which is not easily expressed in terms of the standard system calls (read, write, open, fork, etc.). Especially device drivers often require a certain very specific utility for interacting with the device and it would be very inefficient to implement a separate system call into the kernel API for that purpose.  
-The basic call looks like this: `int ioctl(int fd, unsigned long request, ...)`, where `fd` is the file descriptor (index within the open files table of the current process), which points to a device file. And `request` is a an integer, that fits to a specific function within that drivers ioctl operations. Finally, the three dots are C syntax for variable arguments, which are mostly used in v4l2 to pass a pointer to buffers.  
+The basic call looks like this: `int ioctl(int fd, unsigned long request, ...)`, where `fd` is the file descriptor (index within the open files table of the current process), which points to a device file. And `request` is an integer, that fits to a specific function within that drivers ioctl operations. Finally, the three dots are C syntax for variable arguments, which are mostly used in v4l2 to pass a pointer to buffers.  
 
 One small example:  
 In the strace output, I am able to spot the following line:  
@@ -221,7 +223,7 @@ Device drivers mostly implement their own version of this `ioctl`, for example i
 
 #### Looking at the details
 
-Now that we know, what the command does and what those `ioctl` system calls are, let's look at the details of the streaming process.  
+Now that we know what the command does and what those `ioctl` system calls are, let's look at the details of the streaming process.  
 
 * Start the application & load all the required libraries
 * check if the device exists
@@ -293,7 +295,7 @@ Now that we know, what the command does and what those `ioctl` system calls are,
 
 Let's wrap this up, with a short summary of what just happend:  
 
-After we have dealt with all the built up of the application, the streaming starts by getting the capabilities of the camera device (Check what you can or cannot do with the device).  [*QUERYCAP*]  
+After we have dealt with all the built-up of the application, the streaming starts by getting the capabilities of the camera device (Check what you can or cannot do with the device).  [*QUERYCAP*]  
 
 Then we perform a quick check for the current settings at the device, and get any preconfigured selection of the capture area.  [*QUERYCTL* & *QUERY_EXT_CTRL*] and [*G_SELECTION*]  
 
