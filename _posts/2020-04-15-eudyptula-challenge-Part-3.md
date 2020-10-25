@@ -108,10 +108,12 @@ And update the grub config with: `sudo update-grub`
 * `git format-patch HEAD~`
 * `./scripts/checkpatch.pl {the patch}`
 **sending**  
-* `git send-email\ `   
-   `--cc-cmd='./scripts/get_maintainer.pl --norolestats {the patch}\`    
+* `git send-email\`   
+   `--cc-cmd='./scripts/get_maintainer.pl\`  
+   `--norolestats {the patch}\`    
    `--cc persona@kernel.com,personb@kernel.com`\  
    `{the patch}`  
+* Optional: change the subject prefix of your email title with: `--subject-prefix="PATCH-for-branch-x"` in order to change: "[PATCH] my title",to: "[PATCH-for-branch-x] my title".
 
 #### Great tutorials:  
 [\[3\]](https://nickdesaulniers.github.io/blog/2017/05/16/submitting-your-first-patch-to-the-linux-kernel-and-responding-to-feedback/)
