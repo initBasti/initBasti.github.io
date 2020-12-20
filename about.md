@@ -4,10 +4,21 @@ title: About
 permalink: /about/
 published: true
 ---
+
+<style type="text/css">
+    .image-left {
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+      float: left;
+    }
+</style>
+
+![Sebastian](/images/sebastian.png){: .image-left }
 Sebastian, 28  
 from: germany, Altmark  
 hobbies: programming, learning, piano, long distance running & bouldering , meditation  
-fav topics: Linux Kernel hacking, Unix, OS Design  
+fav topics: Linux Kernel hacking, media devices on ARM boards, Unix tools
 day job: System Administrator Ecommerce
 
 ### Current setup:
@@ -29,7 +40,7 @@ day job: System Administrator Ecommerce
 
 Company website: https://www.panasiam.com  
 blog hosting with: GitHub Pages  
-repository hosting on: http://rocketgit.com/user/initBasti & https://github.com/initBasti 
+repository hosting on: https://github.com/initBasti 
 
 ### Contact me
 
