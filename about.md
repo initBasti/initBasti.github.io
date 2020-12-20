@@ -10,7 +10,7 @@ published: true
       display: block;
       margin-left: auto;
       margin-right: auto;
-      float: left;
+      float: right;
     }
 </style>
 
