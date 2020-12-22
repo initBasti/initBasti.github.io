@@ -18,7 +18,7 @@ published: true
 Sebastian, 28  
 from: germany, Altmark  
 hobbies: programming, learning, piano, long distance running & bouldering , meditation  
-fav topics: Linux Kernel hacking, media devices on ARM boards, Unix tools
+fav topics: Linux Kernel hacking, developing drivers for media devices on ARM boards, Unix tools  
 day job: System Administrator Ecommerce
 
 ### Current setup:
