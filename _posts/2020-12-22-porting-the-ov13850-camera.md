@@ -1,6 +1,6 @@
 # Porting the OV13850 camera to the mainline kernel
 
-![ov13850.jpg](ov13850.jpg)
+![ov13850.jpg](/images/ov13850.jpg)
 [\[1\]](http://wiki.friendlyarm.com/wiki/index.php/Matrix_-_CAM1320)
 
 ## How to port a camera sensor from a downstream kernel to an upstream kernel?
