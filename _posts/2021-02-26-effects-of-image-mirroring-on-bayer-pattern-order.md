@@ -1,11 +1,11 @@
-# Observing RAW bayer images with the OV13850 sensor on a RkISP1 platform
+## An analysis of the RAW bayer images with the OV13850 image sensor on the RkISP1 platform
 
-## Introduction
+### Introduction
 
 I am currently working on porting and improving the driver for the OV13850 image sensor. The image sensor was originally built by the Rockchip team and I try to upstream an improved version of it with a few extra features. If you want to know more about this you can take a look at this [post](https://sebastianfricke.me/porting-the-ov13850-camera/).
 One of those new features is the ability to flip the image horizontally and/or vertically. I was asked if the Bayer order changes on those flips during the patch review and was not able to find a clear indication within the [data-sheet](http://download.t-firefly.com/product/RK3288/Docs/Peripherals/OV13850%20datasheet/Sensor_OV13850-G04A_OmniVision_SpecificationV1.pdf). This small post is dedicated to documenting my journey of finding the answer to that question.
 
-#### Why is it important to know if the Bayer order changes during a flip?
+##### Why is it important to know if the Bayer order changes during a flip?
 
 Because the order of the Bayer pattern is critical for the choice of the output Pixel-format.
 
