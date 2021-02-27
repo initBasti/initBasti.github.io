@@ -143,7 +143,7 @@ The command used for these images is:
 
 ---
 
-And finally here are the raw images using the BGRA setting from *rawpixels.net*, I am really not happy with the resulting images as they are clearly wrongly with a wrong output format, but these are the settings with the least amount errors during my tests:
+And finally here are the raw images using the BGRA setting from *rawpixels.net*, I am really not happy with the resulting images as it is quite clear that the output format doesn't match the pixel-format, but these are the settings with the least amount errors during my tests:
 ![Recorded with v4l2-ctl, extracted a frame with vooya and adjusted the format with rawpixels.net](/images/bayer_order_analysis_rawpixels.png)
 The settings for these images on [rawpixels.net](http://rawpixels.net/) are:
 Predefined format: RGB555  
