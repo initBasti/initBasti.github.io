@@ -139,7 +139,7 @@ Here is what the raw images looked like when I recorded them with `v4l2-ctl` and
 ![Observe the pattern with multiple flip configurations](/images/bayer_order_analysis_raw_mp4.png)
 
 The command used for these images is:  
-`ffmpeg -f rawvideo -vcodec rawvideo -video_size 2112x1568 -pixel_format bayer_bggr16le -i {input.raw} -qp 0 {output.mp4}`
+`ffmpeg -f rawvideo -vcodec rawvideo -video_size 2112x1568 -pixel_format bayer_bggr16be -i {input.raw} -qp 0 {output.mp4}`
 
 ---
 
