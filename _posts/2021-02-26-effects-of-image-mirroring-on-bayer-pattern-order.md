@@ -55,7 +55,7 @@ I found a few tools, that seemed to be viable for that job and a few that are cu
 ### Configuring the tool to stream RAW videos
 
 The camera pipeline for the RkISP1 platform looks like this:
-![RkISP1 platform](rkisp1_pipeline.jpg)
+![RkISP1 platform](/images/rkisp1_pipeline.jpg)
 
 Most of the green nodes have one or more sinks (input) and at least one or more sources (output). At first, we activate the connection between the image signal processor and the image sensor.
 ```bash
