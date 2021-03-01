@@ -15,7 +15,7 @@ published: true
 </style>
 
 ![Sebastian](/images/sebastian.png){: .image-left }
-Sebastian, 28  
+Sebastian, 29  
 from: germany, Altmark  
 hobbies: programming, learning, piano, long distance running & bouldering , meditation  
 fav topics: Linux Kernel hacking, developing drivers for media devices on ARM boards, Unix tools  
